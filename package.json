@@ -1,0 +1,9 @@
+{
+  "name": "quebec-french-audio-2",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Overflow host for the Québec French app's audio pack: the parts that no longer fit on the first site.",
+  "scripts": {
+    "git:squash": "./scripts/git-squash.sh"
+  }
+}
