@@ -1,0 +1,38 @@
+# Publishes site/ to https://mortal-dog.github.io/quebec-french-audio-2/
+#
+# The overflow parts of the audio pack: the ones that no longer fit under the first site's
+# 1 GB Pages limit (mortal-dog/quebec-french-audio). Pages sends
+# `access-control-allow-origin: *` and answers range requests, which is what the web app
+# needs; GitHub release assets send neither.
+name: Deploy site
+
+# No paths filter: `pnpm git:squash` force-pushes an orphan commit, and a filter has no
+# commit range to match against, so it would silently skip the deploy.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
